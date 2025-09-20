@@ -121,12 +121,12 @@ export function TechnologyDetail({ technology, company, onBack }: TechnologyDeta
           </Card>
 
           <Card className="p-6">
-            <h3 className="mb-6">Technology Transfer & Licensing</h3>
+            <h3 className="mb-6">Technology 사업화 실적</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                 <div>
                   <div className="font-medium">Samsung Electronics</div>
-                  <div className="text-sm text-muted-foreground">Licensing Agreement - 2023</div>
+                  <div className="text-sm text-muted-foreground">공급계약 - 2023</div>
                 </div>
                 <div className="text-right">
                   <div className="font-semibold">₩450M</div>
