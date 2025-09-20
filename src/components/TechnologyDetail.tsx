@@ -97,11 +97,13 @@ export function TechnologyDetail({ technology, company, onBack }: TechnologyDeta
       </div>
 
       <Tabs defaultValue="performance" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="bctrend">B/C Trend</TabsTrigger>
-          <TabsTrigger value="market">Market Analysis</TabsTrigger>
-          <TabsTrigger value="ai-insights">AI Insights</TabsTrigger>
+          <TabsTrigger value="ai-insights" className="flex items-center gap-2">
+            <Brain className="h-4 w-4" />
+            AI Insights (Beta)
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="performance" className="space-y-6">
@@ -191,135 +193,13 @@ export function TechnologyDetail({ technology, company, onBack }: TechnologyDeta
           </Card>
         </TabsContent>
 
-        <TabsContent value="market" className="space-y-6">
-          <Card className="p-6">
-            <h3 className="mb-6">Market Position & Industry Analysis</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="mb-4">Market Size & Growth</h4>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span>Total Addressable Market</span>
-                    <span className="font-semibold">$24.5B</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Annual Growth Rate</span>
-                    <span className="font-semibold text-green-600">18.5%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Market Penetration</span>
-                    <span className="font-semibold">2.3%</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="mb-4">Competitive Landscape</h4>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span>Market Rank</span>
-                    <span className="font-semibold">#3</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Key Competitors</span>
-                    <span className="font-semibold">5 major players</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Technology Differentiation</span>
-                    <span className="font-semibold text-green-600">High</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-6">
-            <h4 className="mb-4">Regional Market Distribution</h4>
-            <div className="space-y-4">
-              {[
-                { region: 'South Korea', share: 45, growth: '+12%' },
-                { region: 'Asia Pacific', share: 30, growth: '+25%' },
-                { region: 'North America', share: 15, growth: '+8%' },
-                { region: 'Europe', share: 10, growth: '+15%' }
-              ].map((region, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="font-medium">{region.region}</span>
-                    <span className="text-sm text-green-600">{region.growth}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-32 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full" 
-                        style={{ width: `${region.share * 2}%` }}
-                      />
-                    </div>
-                    <span className="text-sm font-medium w-8">{region.share}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="ai-insights" className="space-y-6">
           <Card className="p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <Brain className="h-6 w-6 text-primary" />
-              <h3>AI-Powered Market Intelligence</h3>
-            </div>
-            
-            <div className="space-y-6">
-              <div>
-                <h4 className="mb-3">Industry Trend Analysis</h4>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-sm">
-                    The {technology.category.toLowerCase()} sector is experiencing accelerated growth driven by increased demand 
-                    for sustainable solutions and government regulatory support. Our AI analysis indicates a 73% probability 
-                    of continued market expansion over the next 3 years, with particular strength in enterprise applications.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-3">Technology Impact Forecast</h4>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-sm">
-                    Machine learning models predict this technology will capture 8-12% additional market share within 
-                    18 months, based on patent strength, commercialization velocity, and competitive positioning. 
-                    Key growth drivers include strategic partnerships and expanding application domains.
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-3">Investment Risk Assessment</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-green-100 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">Low</div>
-                    <div className="text-sm">Technical Risk</div>
-                  </div>
-                  <div className="text-center p-4 bg-yellow-100 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-600">Medium</div>
-                    <div className="text-sm">Market Risk</div>
-                  </div>
-                  <div className="text-center p-4 bg-green-100 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">Low</div>
-                    <div className="text-sm">Regulatory Risk</div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-3">Strategic Recommendations</h4>
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <ul className="text-sm space-y-2">
-                    <li>• Focus on expanding into Southeast Asian markets where regulatory environment is favorable</li>
-                    <li>• Consider strategic partnerships with established industry leaders to accelerate market penetration</li>
-                    <li>• Invest in additional R&D for next-generation applications to maintain competitive advantage</li>
-                    <li>• Monitor patent landscape for potential IP conflicts or licensing opportunities</li>
-                  </ul>
-                </div>
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="mb-2">AI Insights (Beta)</h3>
+                <p className="text-muted-foreground">준비중</p>
               </div>
             </div>
           </Card>

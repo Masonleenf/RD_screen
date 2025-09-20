@@ -3,9 +3,19 @@ import { Header } from './components/Header';
 import { SearchFilters } from './components/SearchFilters';
 import { CompanyCard } from './components/CompanyCard';
 import { TechnologyDetail } from './components/TechnologyDetail';
+import { CompaniesPage } from './components/CompaniesPage';
+import { TechnologiesPage } from './components/TechnologiesPage';
+import { AnalyticsPage } from './components/AnalyticsPage';
+import { CompanyInfo } from './components/CompanyInfo';
+import { FinancialChart } from './components/FinancialChart';
+import { FinancialTable } from './components/FinancialTable';
+import { TechnologyList } from './components/TechnologyList';
 import { mockCompanies, type Company, type Technology } from './components/mockData';
 
+type PageType = 'dashboard' | 'companies' | 'technologies' | 'analytics';
+
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<PageType>('dashboard');
   const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
   const [selectedTechnology, setSelectedTechnology] = useState<Technology | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,6 +55,15 @@ export default function App() {
 
   const handleTechnologySelect = (technology: Technology) => {
     setSelectedTechnology(technology);
+    
+    // Find the company that owns this technology
+    const ownerCompany = mockCompanies.find(company => 
+      company.technologies.some(tech => tech.id === technology.id)
+    );
+    
+    if (ownerCompany) {
+      setSelectedCompany(ownerCompany);
+    }
   };
 
   const handleBack = () => {
@@ -55,104 +74,84 @@ export default function App() {
     }
   };
 
+  const renderDashboard = () => (
+    <>
+      <div className="mb-8">
+        <h1 className="mb-2">BlackTutle</h1>
+        <p className="text-muted-foreground">
+          NTIS 데이터와 검증된 사업성과를 기반으로 한 기술 사업화 검색 플랫폼
+        </p>
+      </div>
+      
+      <SearchFilters onSearch={handleSearch} />
+      
+      {searchQuery && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+          {filteredCompanies.map((company) => (
+            <CompanyCard
+              key={company.id}
+              company={company}
+              onSelect={handleCompanySelect}
+            />
+          ))}
+        </div>
+      )}
+      
+      {searchQuery && filteredCompanies.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">검색 결과가 없습니다.</p>
+        </div>
+      )}
+    </>
+  );
+
+  const renderCompanyDetail = () => {
+    if (!selectedCompany) return null;
+    
+    return currentPage === 'dashboard' ? (
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="mb-2">{selectedCompany.name}</h1>
+            <p className="text-muted-foreground">{selectedCompany.industry} | {selectedCompany.location}</p>
+          </div>
+          <button 
+            onClick={handleBack}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            뒤로 가기
+          </button>
+        </div>
+
+        {/* Company Basic Info */}
+        <CompanyInfo company={selectedCompany} />
+
+        {/* Financial Chart */}
+        <FinancialChart data={selectedCompany.financialHistory} />
+
+        {/* Financial Table */}
+        <FinancialTable data={selectedCompany.financialHistory} />
+
+        {/* Technology List */}
+        <TechnologyList 
+          technologies={selectedCompany.technologies}
+          onTechnologySelect={handleTechnologySelect}
+        />
+      </div>
+    ) : null;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <Header currentPage={currentPage} onPageChange={setCurrentPage} />
       
       <main className="max-w-7xl mx-auto px-4 py-6">
-        {!selectedCompany && !selectedTechnology && (
-          <>
-            <div className="mb-8">
-              <h1 className="mb-2">R&D Earning Screener</h1>
-              <p className="text-muted-foreground">
-                Technology commercialization search platform powered by NTIS data and verified business performance
-              </p>
-            </div>
-            
-            <SearchFilters onSearch={handleSearch} />
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-              {filteredCompanies.map((company) => (
-                <CompanyCard
-                  key={company.id}
-                  company={company}
-                  onSelect={handleCompanySelect}
-                />
-              ))}
-            </div>
-          </>
-        )}
-
-        {selectedCompany && !selectedTechnology && (
-          <div>
-            <button 
-              onClick={handleBack}
-              className="mb-6 flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
-            >
-              ← Back to Search
-            </button>
-            
-            <div className="bg-white rounded-lg p-6 mb-8">
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h1 className="mb-2">{selectedCompany.name}</h1>
-                  <p className="text-muted-foreground">{selectedCompany.industry}</p>
-                </div>
-                <div className="text-right">
-                  <div className="text-sm text-muted-foreground">Market Cap</div>
-                  <div className="text-lg font-semibold">{selectedCompany.marketCap}</div>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div>
-                  <div className="text-sm text-muted-foreground">Revenue</div>
-                  <div className="font-semibold">{selectedCompany.financials.revenue}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">R&D Investment</div>
-                  <div className="font-semibold">{selectedCompany.financials.rdInvestment}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Employee Count</div>
-                  <div className="font-semibold">{selectedCompany.employeeCount}</div>
-                </div>
-                <div>
-                  <div className="text-sm text-muted-foreground">Founded</div>
-                  <div className="font-semibold">{selectedCompany.founded}</div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h2 className="mb-6">Technology Portfolio</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {selectedCompany.technologies.map((technology) => (
-                  <div
-                    key={technology.id}
-                    onClick={() => handleTechnologySelect(technology)}
-                    className="bg-white rounded-lg p-6 cursor-pointer hover:shadow-md transition-shadow border"
-                  >
-                    <h3 className="mb-2">{technology.name}</h3>
-                    <p className="text-sm text-muted-foreground mb-4">{technology.description}</p>
-                    
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <div className="text-sm text-muted-foreground">B/C Ratio</div>
-                        <div className="font-semibold text-lg">{technology.bcRatio.toFixed(1)}x</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-sm text-muted-foreground">R&D Investment</div>
-                        <div className="font-semibold">{technology.rdCost}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
+        {currentPage === 'dashboard' && !selectedCompany && !selectedTechnology && renderDashboard()}
+        {currentPage === 'companies' && !selectedTechnology && <CompaniesPage />}
+        {currentPage === 'technologies' && !selectedTechnology && <TechnologiesPage onTechnologySelect={handleTechnologySelect} />}
+        {currentPage === 'analytics' && !selectedTechnology && <AnalyticsPage />}
+        {selectedCompany && !selectedTechnology && currentPage === 'dashboard' && renderCompanyDetail()}
         {selectedTechnology && (
           <TechnologyDetail
             technology={selectedTechnology}

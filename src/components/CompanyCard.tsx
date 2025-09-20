@@ -26,8 +26,8 @@ export function CompanyCard({ company, onSelect }: CompanyCardProps) {
           </Badge>
         </div>
         <div className="text-right">
-          <div className="text-sm text-muted-foreground">Market Cap</div>
-          <div className="font-semibold">{company.marketCap}</div>
+          <div className="text-sm text-muted-foreground">총자산</div>
+          <div className="font-semibold">{company.totalAssets}</div>
         </div>
       </div>
       
@@ -35,7 +35,7 @@ export function CompanyCard({ company, onSelect }: CompanyCardProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Building2 className="h-4 w-4" />
-            Revenue
+            매출액
           </div>
           <span className="font-medium">{company.financials.revenue}</span>
         </div>
@@ -43,7 +43,7 @@ export function CompanyCard({ company, onSelect }: CompanyCardProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <TrendingUp className="h-4 w-4" />
-            R&D Investment
+            R&D 투자
           </div>
           <span className="font-medium">{company.financials.rdInvestment}</span>
         </div>
@@ -51,7 +51,7 @@ export function CompanyCard({ company, onSelect }: CompanyCardProps) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Users className="h-4 w-4" />
-            Employees
+            직원수
           </div>
           <span className="font-medium">{company.employeeCount}</span>
         </div>
@@ -59,12 +59,12 @@ export function CompanyCard({ company, onSelect }: CompanyCardProps) {
       
       <div className="border-t pt-4">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-muted-foreground">Top Technology</span>
+          <span className="text-sm text-muted-foreground">주요 기술</span>
           <span className="font-semibold text-primary">{topTechnology.bcRatio.toFixed(1)}x B/C</span>
         </div>
         <div className="text-sm font-medium">{topTechnology.name}</div>
         <div className="text-xs text-muted-foreground mt-1">
-          {company.technologies.length} technologies total
+          총 {company.technologies.length}개 기술 보유
         </div>
       </div>
     </Card>
